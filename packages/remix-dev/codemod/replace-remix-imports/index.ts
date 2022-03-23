@@ -15,17 +15,17 @@ export const parser = "tsx";
 type Specifier = ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
 const isNamedImportsSpecifier = (
   specifier: Specifier
-): specifier is ImportSpecifier => specifier.type === 'ImportSpecifier'
+) => specifier.type === 'ImportSpecifier'
 const isDefaultSpecifier = (
   specifier: Specifier
-): specifier is ImportDefaultSpecifier => specifier.type === 'ImportDefaultSpecifier'
+) => specifier.type === 'ImportDefaultSpecifier'
 const isNamespaceSpecifier = (
   specifier: Specifier
-): specifier is ImportNamespaceSpecifier => specifier.type === 'ImportNamespaceSpecifier'
+) => specifier.type === 'ImportNamespaceSpecifier'
 
-type NamedImportIdentifier = {
-  name: string
-  alias: string
+interface NamedImportIdentifier {
+  name: string,
+  alias: string,
 }
 
 const transform: Transform = (file, api, options) => {
@@ -69,9 +69,7 @@ const transform: Transform = (file, api, options) => {
     let kind = path.value.importKind
     if (path.value.specifiers === undefined) return
     path.value.specifiers.forEach(specifier => {
-      if (!isNamedImportsSpecifier(specifier)) {
-        throw Error('This should never happen')
-      }
+      if (specifier.type !== 'ImportSpecifier') return
       let name = specifier.imported.name
       let alias = specifier.local?.name ?? name
       if (kind === "value") {

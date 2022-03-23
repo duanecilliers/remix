@@ -1,6 +1,6 @@
 interface Exports {
-  value: string[]
-  type: string[]
+  value: string[],
+  type: string[],
 }
 
 const serverRuntimeInterface: Exports = {
